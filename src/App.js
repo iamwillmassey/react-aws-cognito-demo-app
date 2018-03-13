@@ -72,6 +72,8 @@ class App extends Component {
   loadAuthenticatedUser() {
     console.log("Loading auth user...");
 
+    var self = this;
+
     var cognitoUser = this.getCognitoUserPool().getCurrentUser();
 
     if (cognitoUser != null) {
@@ -81,13 +83,13 @@ class App extends Component {
           console.error(err);
         } else {
           var creds = new AWS.CognitoIdentityCredentials({
-            IdentityPoolId : this.state.identityPoolId,
+            IdentityPoolId : self.state.identityPoolId,
             Logins : {
                // Populate with details from AWS Console
               '': session.getIdToken().getJwtToken()
             }
           },{
-            region: this.state.aws_region
+            region: self.state.aws_region
           });
           console.log(`Creds: ${creds}`);
           creds.refresh(function(err, data) {
